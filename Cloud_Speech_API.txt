@@ -77,7 +77,7 @@ mvn clean jetty:run
 Speech to Text Transcription with the Cloud Speech API:
 --------------------------------------------------------------
 
-<Need to update>
+<Need to update> Manual Update carefully setup by step
 
 
 
