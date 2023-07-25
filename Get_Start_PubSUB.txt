@@ -1,0 +1,49 @@
+Pub/Sub: https://www.cloudskillsboost.google/quests/301
+
+
+
+gcloud auth list 
+
+gcloud pubsub topics create MyTopic
+
+gcloud pubsub subscriptions create MySub --topic MyTopic
+
+
+
+
+
+Cloud Scheduler: Qwik Start:
+--------------------------------
+
+
+gcloud auth list 
+
+gcloud pubsub topics create cron-topic
+
+gcloud pubsub subscriptions create cron-sub --topic cron-topic
+
+
+
+Pub/Sub Lite: Qwik Start:
+---------------------------------
+
+gcloud auth list
+
+Do it manually 
+
+
+Get Started with Pub/Sub: Challenge Lab:
+----------------------------------------------
+
+gcloud auth list 
+
+export TOPIC=qwiklabs-gcp-00-6fc9752b998a-cron-topic
+export SUB=qwiklabs-gcp-00-6fc9752b998a-cron-sub
+
+gcloud pubsub topics create $TOPIC
+
+gcloud pubsub subscriptions create $SUB --topic $TOPIC
+
+
+
+

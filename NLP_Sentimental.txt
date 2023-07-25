@@ -1,0 +1,101 @@
+Analyze Sentiment with Natural Language API
+
+https://www.cloudskillsboost.google/quests/323
+
+
+Cloud Natural Language API: Qwik Start:
+============================================
+
+export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value core/project)
+gcloud iam service-accounts create my-natlang-sa \
+  --display-name "my natural language service account"
+gcloud iam service-accounts keys create ~/key.json \
+  --iam-account my-natlang-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com
+  
+export GOOGLE_APPLICATION_CREDENTIALS="/home/USER/key.json"
+
+
+In VM: 
+
+gcloud ml language analyze-entities --content="Michelangelo Caravaggio, Italian painter, is known for 'The Calling of Saint Matthew'." > result.json
+
+
+
+
+Using the Natural Language API from Google Docs:
+===================================================
+
+Create API Key (manual)
+
+Create google doc and update API KEY 
+
+
+Entity and Sentiment Analysis with the Natural Language API:
+=================================================================
+
+Create API Key (manual)
+
+
+export API_KEY=AIzaSyC3dLoUtbPCocjYGZuTke7qDWQPEAs4q0g
+
+cat > request.json <<EOF
+{
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content":"Joanne Rowling, who writes under the pen names J. K. Rowling and Robert Galbraith, is a British novelist and screenwriter who wrote the Harry Potter fantasy series."
+  },
+  "encodingType":"UTF8"
+}
+EOF
+
+curl "https://language.googleapis.com/v1/documents:analyzeEntities?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json > result.json
+  
+  
+
+
+
+Analyze Sentiment with Natural Language API: Challenge Lab:
+===============================================================
+
+Create API KEY (Manual)
+
+Task2: Copy code in doc and update key
+
+
+cat > analyze-request.json <<EOF
+{
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content": "Google, headquartered in Mountain View, unveiled the new Android phone at the Consumer Electronic Show.  Sundar Pichai said in his keynote that users love their new Android phones."
+  },
+  "encodingType": "UTF8"
+}
+EOF
+
+curl -s -H "Content-Type: application/json" \
+-H "Authorization: Bearer $(gcloud auth print-access-token)" \
+"https://language.googleapis.com/v1/documents:analyzeSyntax" \
+-d @analyze-request.json > analyze-response.txt
+
+
+
+
+
+cat > multi-nl-request.json <<EOF
+{
+  "document": {
+    "type": "PLAIN_TEXT",
+    "content": "Le bureau japonais de Google est situé à Roppongi Hills, Tokyo.",
+    "language": "fr"
+  }
+}
+
+EOF
+
+
+curl -s -H "Content-Type: application/json" \
+-H "Authorization: Bearer $(gcloud auth print-access-token)" \
+"https://language.googleapis.com/v1/documents:analyzeEntities" \
+-d @multi-nl-request.json > multi-response.txt
+

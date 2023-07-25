@@ -1,0 +1,137 @@
+
+Using the Google Cloud Speech API
+https://www.cloudskillsboost.google/quests/320
+
+Google Cloud Speech API: Qwik Start
+======================================
+
+
+export API_KEY="AIzaSyDoCDynOHp_aHnsJAhJ5nf343l8F2u2p3U"
+
+cat > request.json <<EOF
+{
+  "config": {
+      "encoding":"FLAC",
+      "languageCode": "en-US"
+  },
+  "audio": {
+      "uri":"gs://cloud-samples-tests/speech/brooklyn.flac"
+  }
+}
+EOF
+
+curl -s -X POST -H "Content-Type: application/json" --data-binary @request.json \
+"https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}"
+
+curl -s -X POST -H "Content-Type: application/json" --data-binary @request.json \
+"https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}" > result.json
+
+
+
+
+Speaking with a Webpage - Streaming Speech Transcripts: (After java applet check progress and then press ctrl + C after java applet Server)
+-------------------------------------------------------
+
+export zone="us-central1-f"
+export project="qwiklabs-gcp-02-27a58e84f597"
+
+	
+gcloud compute instances create speaking-with-a-webpage \
+    --project=$project \
+    --zone=$zone \
+    --machine-type=e2-medium \
+    --metadata=enable-oslogin=true \
+    --maintenance-policy=MIGRATE \
+    --provisioning-model=STANDARD \
+    --scopes=https://www.googleapis.com/auth/cloud-platform \
+    --tags=http-server,https-server \
+    --create-disk=auto-delete=yes,boot=yes,device-name=speaking-with-a-webpage,image=projects/debian-cloud/global/images/debian-11-bullseye-v20230711,mode=rw,size=10,type=projects/$project/zones/us-east4-c/diskTypes/pd-balanced \
+    --no-shielded-secure-boot \
+    --shielded-vtpm \
+    --shielded-integrity-monitoring \
+    --labels=goog-ec-src=vm_add-gcloud \
+    --reservation-affinity=any
+	
+
+gcloud compute ssh speaking-with-a-webpage --zone=$zone
+
+
+sudo apt update && sudo apt install git -y
+sudo apt-get install -y maven openjdk-11-jdk
+
+git clone https://github.com/googlecodelabs/speaking-with-a-webpage.git
+
+gcloud compute firewall-rules create dev-ports \
+    --allow=tcp:8443 \
+    --source-ranges=0.0.0.0/0
+	
+cd ~/speaking-with-a-webpage/01-hello-https
+
+mvn clean jetty:run
+
+cd ~/speaking-with-a-webpage/02-webaudio
+
+mvn clean jetty:run
+
+
+Speech to Text Transcription with the Cloud Speech API:
+--------------------------------------------------------------
+
+<Need to update>
+
+
+
+
+Challenge:
+=============
+
+#Define APIKEY for task 1
+
+export API_KEY="AIzaSyD0SOiNu7RTUT3czcwteltA456X-NKdCAc"
+
+# Define variables for file names
+
+task_2_request_file="speech_request.json"
+
+task_2_response_file="response.json"
+
+task_3_request_file="speech_request_sp.json"
+
+task_3_response_file="response_sp.json"
+
+
+
+# Generate speech_request_en.json file
+cat > "$task_2_request_file" <<EOF
+{
+  "config": {
+    "encoding": "LINEAR16",
+    "languageCode": "en-US",
+    "audioChannelCount": 2
+  },
+  "audio": {
+    "uri": "gs://spls/arc131/question_en.wav"
+  }
+}
+EOF
+
+# Make API call for English transcription
+curl -s -X POST -H "Content-Type: application/json" --data-binary @"$task_2_request_file" \
+"https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}" > "$task_2_response_file"
+
+# Generate request_sp.json file
+cat > "$task_3_request_file" <<EOF
+{
+  "config": {
+    "encoding": "FLAC",
+    "languageCode": "es-ES"
+  },
+  "audio": {
+    "uri": "gs://spls/arc131/multi_es.flac"
+  }
+}
+EOF
+
+# Make API call for Spanish transcription
+curl -s -X POST -H "Content-Type: application/json" --data-binary @"$task_3_request_file" \
+"https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}" > "$task_3_response_file"
