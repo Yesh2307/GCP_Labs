@@ -1,0 +1,109 @@
+SRE Responsibilities:
+
+Monitor and observe environments using tools.
+Analyze data and statistics to determine actions to be done.
+Identify the schema to check critical issue and troubleshoot them.
+Resolve incidents with minimal interruptions to business.
+Take measure to avoid similar past incidents.
+Make components serviceable to deliver successful outcomes.
+Create lazy docs to manage and troubleshoot a system.
+
+
+SRE principles:
+
+System Thinking: Think deeply and broadly for an end-to-end view of a system and its components.
+Data Driven Decisions: Make meaningful sense of signals and metrics to determine what to automate and what to engineer, among other activities.
+Embracing Risk: Control risk through error budgets.
+Eliminating Toil: Eliminate toil and tasks that can be automated.
+Simplicity: Reduce complexity, not add to it.
+Technical Debt: Proactively manage technical debt for faster rollout of version updates and bug fixes.
+Collaboration: Align development and operations through shared goals.
+Shared Responsibility: Share responsibility with the software engineer and product owner or manager.
+Trust & Transparency: Build trust among teams through blameless postmortems.
+
+SLO:
+
+The SLO is an agreement by the product owner, the development team, and the operations team, and all parties must support it.
+SLOs include measurement points for a client and also the situation when it is met.
+
+Characteristics of an SLO:
+
+Include a measurement point and condition.
+Are achievable and reflect the technical reality of your organization.
+Are high enough to keep the client satisfied and low enough that the business can achieve.
+Change over time as your system improves or client needs change.
+
+For example:
+
+When a new service is introduced, less params are considered and SLO will be less.
+Slowly by included new params and features the SLO will gradually increase.
+Also consider the system abilities as well in SLO
+
+SLOs define target levels of service, measured by one or more Service Level Indicators (SLIs), metrics that represent your service level from your client's point of view.
+
+
+SLI:
+
+An SLI is a quantitative measure of the level of service performance or availability provided.
+Some of SLIs are 
+
+Availibilty: Able to respond
+Latency: How much time 
+Throughput: How many requests are handled.
+Erroe rate : How many errors are generated
+Durability: How likely the data is mantained
+Correctness: Does it work properly 
+
+SLO is a mixture of all SLIs 
+
+For example 
+
+A service needs to be 90 % available, less latency, etc
+
+SLA:
+=-====
+
+The SLA is the level of service to be delivered, including commercial implications for breaching the SLO.
+
+
+SLO : Business requirement 
+SLI: Metircs reality
+SLA on SLI will be considered
+
+Error Budget:
+-------------------
+
+An error budget is a metric that measures allowed risk as determined by shared ownership of ops and product development
+
+Business requirement : No downtime -- SLO
+  ==> more than 98 % SLA of latency (SLI) 
+ 
+SRE team uses error budget (100 - SLA) to handle the upgrade of new features. 
+  -- Known downtime
+  
+Realibility and Resiliency:
+=================
+Reliability is a design engineering discipline to ensure that a system will perform its intended function for the required duration within a given environment.
+
+Resiliency is the ability of a system to recover from certain types of failures and remain functional from the user perspective
+
+MOnitoring:
+==============
+
+Metrics: Collect info from application and platform
+Logging: Collecting text info that application generates
+Synthetic Monitoring: Sending external message and monitor a response.
+
+Alerts are used to notify first responders that their attention is required. 
+The faster your first responders find out about an issue, the faster they can respond.
+
+
+Availability is the percentage of time a service remains operational, as measured by response time and throughput.
+Performance is a service's ability to respond to requests and process transactions in a timely and correct manner, as measured by load and speed.
+Reliability is the probability that a system will meet performance standards over a duration of time, as measured by the frequency and impact of failures.
+
+
+
+
+ 
+
