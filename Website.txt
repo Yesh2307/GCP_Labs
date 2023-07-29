@@ -1,0 +1,290 @@
+Build a Website on Google Cloud:
+=================================
+
+Deploy Your Website on Cloud Run:
+====================================
+
+
+git clone https://github.com/googlecodelabs/monolith-to-microservices.git
+cd ~/monolith-to-microservices
+
+./setup.sh
+
+cd ~/monolith-to-microservices/monolith
+npm start
+
+
+
+gcloud artifacts repositories create monolith-demo \
+    --repository-format=docker \
+    --location=us-central1 
+	
+gcloud auth configure-docker us-central1-docker.pkg.dev
+
+
+gcloud services enable artifactregistry.googleapis.com \
+    cloudbuild.googleapis.com \
+    run.googleapis.com
+	
+gcloud builds submit --tag us-central1-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/monolith-demo/monolith:1.0.0
+
+
+gcloud run deploy monolith --image us-central1-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/monolith-demo/monolith:1.0.0 --region us-central1
+
+
+gcloud run services list
+
+gcloud run deploy monolith --image us-central1-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/monolith-demo/monolith:1.0.0 --region us-central1 --concurrency 1
+
+gcloud run deploy monolith --image us-central1-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/monolith-demo/monolith:1.0.0 --region us-central1 --concurrency 80
+
+cd ~/monolith-to-microservices/react-app/src/pages/Home
+mv index.js.new index.js
+
+cat ~/monolith-to-microservices/react-app/src/pages/Home/index.js
+
+
+cd ~/monolith-to-microservices/react-app
+npm run build:monolith
+
+cd ~/monolith-to-microservices/monolith
+gcloud builds submit --tag us-central1-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/monolith-demo/monolith:2.0.0
+
+gcloud run deploy monolith --image us-central1-docker.pkg.dev/${GOOGLE_CLOUD_PROJECT}/monolith-demo/monolith:2.0.0 --region us-central1
+
+gcloud run services describe monolith --platform managed --region us-central1
+
+gcloud beta run services list
+
+
+
+
+
+
+Deploy, Scale, and Update Your Website on Google Kubernetes Engine:
+=======================================================================
+
+gcloud config set compute/zone us-central1-f
+
+gcloud services enable container.googleapis.com
+
+gcloud container clusters create fancy-cluster --num-nodes 3
+
+gcloud compute instances list
+
+cd ~
+git clone https://github.com/googlecodelabs/monolith-to-microservices.git
+
+
+cd ~/monolith-to-microservices
+./setup.sh
+
+nvm install --lts
+
+cd ~/monolith-to-microservices/monolith
+npm start
+
+gcloud services enable cloudbuild.googleapis.com
+
+cd ~/monolith-to-microservices/monolith
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:1.0.0 .
+
+kubectl create deployment monolith --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:1.0.0
+
+kubectl expose deployment monolith --type=LoadBalancer --port 80 --target-port 8080
+
+kubectl scale deployment monolith --replicas=3
+
+
+cd ~/monolith-to-microservices/react-app/src/pages/Home
+mv index.js.new index.js
+
+cat ~/monolith-to-microservices/react-app/src/pages/Home/index.js
+
+cd ~/monolith-to-microservices/react-app
+npm run build:monolith
+
+cd ~/monolith-to-microservices/monolith
+
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:2.0.0 .
+
+
+kubectl set image deployment/monolith monolith=gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:2.0.0
+
+npm start
+
+
+
+Migrating a Monolithic Website to Microservices on Google Kubernetes Engine:
+==============================================================================
+
+gcloud config set compute/zone us-west1-a
+
+cd ~
+git clone https://github.com/googlecodelabs/monolith-to-microservices.git
+cd ~/monolith-to-microservices
+./setup.sh
+
+gcloud services enable container.googleapis.com
+
+gcloud container clusters create fancy-cluster --num-nodes 3 --machine-type=e2-standard-4
+
+cd ~/monolith-to-microservices
+./deploy-monolith.sh
+
+cd ~/monolith-to-microservices/microservices/src/orders
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/orders:1.0.0 .
+
+kubectl create deployment orders --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/orders:1.0.0
+
+kubectl expose deployment orders --type=LoadBalancer --port 80 --target-port 8081
+
+
+kubectl get service orders   < Manual> 
+
+-----------------------------------------------------------
+cd ~/monolith-to-microservices/react-app
+
+export IP=$(kubectl get service orders | awk -F ' ' '{print $3}' | tail -1)
+
+nano .env.monolith
+
+REACT_APP_ORDERS_URL=http://35.233.187.103/api/orders
+REACT_APP_PRODUCTS_URL=/service/products
+
+==============================================================
+
+npm run build:monolith
+
+cd ~/monolith-to-microservices/monolith
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:2.0.0 .
+
+kubectl set image deployment/monolith monolith=gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:2.0.0
+
+cd ~/monolith-to-microservices/microservices/src/products
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/products:1.0.0 .
+
+kubectl create deployment products --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/products:1.0.0
+
+kubectl expose deployment products --type=LoadBalancer --port 80 --target-port 8082
+
+kubectl get service products
+
+====================MANUAL =====================
+
+cd ~/monolith-to-microservices/react-app
+nano .env.monolith
+
+REACT_APP_ORDERS_URL=http://35.233.187.103/api/orders
+REACT_APP_PRODUCTS_URL=http://35.247.19.134/api/products
+
+====================================================
+
+
+npm run build:monolith
+
+cd ~/monolith-to-microservices/monolith
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:3.0.0 .
+
+kubectl set image deployment/monolith monolith=gcr.io/${GOOGLE_CLOUD_PROJECT}/monolith:3.0.0
+
+cd ~/monolith-to-microservices/react-app
+cp .env.monolith .env
+npm run build
+
+cd ~/monolith-to-microservices/microservices/src/frontend
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/frontend:1.0.0 .
+
+kubectl create deployment frontend --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/frontend:1.0.0
+
+kubectl expose deployment frontend --type=LoadBalancer --port 80 --target-port 8080
+
+
+
+Build a Website on Google Cloud: Challenge Lab:
+----------------------------------------------------
+
+export MONOLITH_IMAGE=fancy-monolith-288
+export CLUSTER=fancy-production-220
+
+export ORDERS=fancy-orders-921
+export PRODUCTS=fancy-products-327
+export FRONTEND=fancy-frontend-814
+
+
+gcloud config set compute/zone us-central1-a
+
+cd ~
+git clone https://github.com/googlecodelabs/monolith-to-microservices.git
+cd ~/monolith-to-microservices
+./setup.sh
+
+nvm install --lts
+
+
+cd ~/monolith-to-microservices/monolith
+npm start
+
+gcloud services enable cloudbuild.googleapis.com
+
+cd ~/monolith-to-microservices/monolith
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/$MONOLITH_IMAGE:1.0.0 .     # Update Image name
+
+gcloud container clusters create $CLUSTER --num-nodes 3
+
+
+kubectl create deployment $MONOLITH_IMAGE --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/$MONOLITH_IMAGE:1.0.0
+
+kubectl expose deployment $MONOLITH_IMAGE --type=LoadBalancer --port 80 --target-port 8080
+
+
+cd ~/monolith-to-microservices/microservices/src/orders
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/$ORDERS:1.0.0 .
+
+kubectl create deployment $ORDERS --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/$ORDERS:1.0.0
+
+kubectl expose deployment $ORDERS --type=LoadBalancer --port 80 --target-port 8081
+
+kubectl get service $ORDERS
+
+
+cd ~/monolith-to-microservices/microservices/src/products
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/$PRODUCTS:1.0.0 .
+
+kubectl create deployment $PRODUCTS --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/$PRODUCTS:1.0.0
+
+kubectl expose deployment $PRODUCTS --type=LoadBalancer --port 80 --target-port 8082
+
+kubectl get service $PRODUCTS
+
+
+===================================================================================
+cd ~/monolith-to-microservices/react-app
+nano .env
+
+REACT_APP_ORDERS_URL=http://34.133.79.127/api/orders
+REACT_APP_PRODUCTS_URL=http://35.232.245.166/api/products
+=====================================================================================
+
+
+npm run build
+
+cd ~/monolith-to-microservices/microservices/src/frontend
+gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/$FRONTEND:1.0.0 .
+
+kubectl create deployment $FRONTEND --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/$FRONTEND:1.0.0
+
+kubectl expose deployment $FRONTEND --type=LoadBalancer --port 80 --target-port 8080
+
+
+
+
+
+
+
+
+
+
+
+
+
