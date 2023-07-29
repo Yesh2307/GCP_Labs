@@ -13,6 +13,7 @@
 | 7 |  The Basics of Google Cloud Compute | GSP319 | [link](<https://www.cloudskillsboost.google/quests/319>) | [Solution](<https://github.com/Yesh2307/GCP_Labs/blob/main/Basic_compute_cloud.txt>) -- Ongoing
 | 8 | Protect Sensitive Data with Data Loss Prevention | GSP315 | [link](<https://www.cloudskillsboost.google/quests/315>) | [Solution](<https://github.com/Yesh2307/GCP_Labs/blob/main/Protect_data_sensitive_data.txt>)
 | 9 | Analyze Speech and Language with Google APIs | GSP302 | [link](<https://www.cloudskillsboost.google/quests/302>) | [Solution](<https://github.com/Yesh2307/GCP_Labs/blob/main/Analyze%20Speech%20.txt>)
+| 10 | Build a Website on Google Clouds | GSP115 | [link](<https://www.cloudskillsboost.google/quests/115>) | [Solution](<https://github.com/Yesh2307/GCP_Labs/blob/main/Website.txt>)
 
 
 
@@ -38,8 +39,8 @@
 | 16 | Cloud Speech API: 3 Ways | GSP326 | [link](<https://www.cloudskillsboost.google/quests/326>) | Manual |
 | 17 | Use APIs to Work with Cloud Storage | GSP321 | [link](<https://www.cloudskillsboost.google/quests/321>) | Manual |
 | 18 | Insights from Data with BigQuery | GSP123 | [link](<https://www.cloudskillsboost.google/quests/123>) | Manual |
-| 19 | Insights from Data with BigQuery | GSP302 | [link](<https://www.cloudskillsboost.google/quests/302>) | Updated |
-
+| 19 | Analyze Speech and Language with Google APIs | GSP302 | [link](<https://www.cloudskillsboost.google/quests/302>) | Updated |
+| 20 | Build a Website on Google Cloud | GSP115 | [link](<https://www.cloudskillsboost.google/quests/115>) | Updated |
 
 
 
