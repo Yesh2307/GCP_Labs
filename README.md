@@ -44,6 +44,8 @@
 | 21 | Perform Foundational Infrastructure Tasks in Google Cloud | GSP118 | [link](<https://www.cloudskillsboost.google/quests/118>) | Manual |
 
 
+
+
    
 
 
