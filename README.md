@@ -42,8 +42,7 @@
 | 19 | Analyze Speech and Language with Google APIs | GSP302 | [link](<https://www.cloudskillsboost.google/quests/302>) | Updated |
 | 20 | Build a Website on Google Cloud | GSP115 | [link](<https://www.cloudskillsboost.google/quests/115>) | Updated |
 | 21 | Perform Foundational Infrastructure Tasks in Google Cloud | GSP118 | [link](<https://www.cloudskillsboost.google/quests/118>) | Manual |
-
-
+| 22 | Configure Service Accounts and IAM Roles for Google Cloud | GSP328 | [link](<https://www.cloudskillsboost.google/quests/328>) | Manual |
 
 
    
